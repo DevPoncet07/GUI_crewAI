@@ -14,3 +14,5 @@ class GestionAgents:
     def dump_saved_data(self,data):
         with open(self.path/"save/data.json",'w') as f:
             json.dump(data,f,indent=4)
+
+
