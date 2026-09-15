@@ -72,4 +72,4 @@ crew = Crew(
     verbose=True,
 )
 
-result = crew.kickoff(inputs={"demande": "Créer un endpoint FastAPI qui liste des utilisateurs paginés"})
+result = crew.kickoff(inputs={"demande": "Créer petit script en javascript dans un fichier math.js dans le dossier Mes_ia, ce script doit contenir plusieurs fonctione mathematique de base, exportable  "})

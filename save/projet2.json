@@ -1,6 +1,6 @@
 {
     "name": "projet2",
-    "focus": false,
+    "focus": true,
     "path": "",
     "agents": [
         {
@@ -28,12 +28,13 @@
             "verbose": "True"
         },
         {
-            "role": "Reviewer senior",
-            "goal": "Relire le code pour la qualit\u00e9, la s\u00e9curit\u00e9 et les bonnes pratiques",
-            "backstory": "Tu es exigeant sur la lisibilit\u00e9, la s\u00e9curit\u00e9 et la maintenabilit\u00e9.",
+            "role": "Reviewer senior2",
+            "goal": "Relire le code pour la qualit\u00e9, la s\u00e9curit\u00e9 et les bonnes pratiques\n",
+            "backstory": "Tu es exigeant sur la lisibilit\u00e9, la s\u00e9curit\u00e9 et la maintenabilit\u00e9.\n",
             "model": "ollama/qwen2.5-coder:32b",
             "tools": [],
             "verbose": "True"
         }
-    ]
+    ],
+    "tasks": []
 }

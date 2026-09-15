@@ -4,6 +4,7 @@ import json
 
 from core.Project import Project
 from core.Agent import Agent
+from core.Tasks import Tasks
 
 class GestionProjets:
     def __init__(self,boss):
@@ -14,9 +15,9 @@ class GestionProjets:
         self.change_focus_project()
         name_project=name+".json"
         f= open(self.path/"save/"/name_project,"x")
-        projetJson='{\n    "name":"'+name+'",\n    "focus":true,\n    "path": "'+path+'",\n    "agents":[]\n}'
-        f.write(projetJson)
-        project=Project({"name": name, "focus": True, "path": path, "agents": []})
+        projet_json='{\n    "name":"'+name+'",\n    "focus":true,\n    "path": "'+path+'",\n    "agents":[],\n  "taches":[]}'
+        f.write(projet_json)
+        project=Project({"name": name, "focus": True, "path": path, "agents": [],"taches":[]})
         return project
 
     def read_saved_data(self):
@@ -29,7 +30,10 @@ class GestionProjets:
                 agents=[]
                 for agent in data["agents"]:
                     agents.append(Agent(agent))
-                projects.append(Project({"name":data["name"],"focus":focus,"path":data['path'],"agents":agents}))
+                tasks=[]
+                for task in data["tasks"]:
+                    tasks.append(Tasks(task))
+                projects.append(Project({"name":data["name"],"focus":focus,"path":data['path'],"agents":agents,"tasks":tasks}))
         return projects
 
     def dump_saved_data(self,project):
@@ -37,8 +41,10 @@ class GestionProjets:
         agents=[]
         for agent in project.agents:
             agents.append({"role":agent.role,"goal":agent.goal,"backstory":agent.backstory,"model":agent.model,"tools":agent.tools,"verbose":agent.verbose})
-        print(agents)
-        data={"name":project.name,"focus":project.focus,"path":project.path,"agents":agents}
+        tasks=[]
+        for task in project.tasks:
+            tasks.append({"description":task.description})
+        data={"name":project.name,"focus":project.focus,"path":project.path,"agents":agents,"tasks":tasks}
         with open(self.path/"save"/name_project,'w') as f:
             json.dump(data,f,indent=4)
 
@@ -53,7 +59,6 @@ class GestionProjets:
                 project.focus=True
             else:
                 project.focus=False
-            print(project.name)
             self.dump_saved_data(project)
 
 

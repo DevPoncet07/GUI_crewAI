@@ -1,8 +1,11 @@
 import customtkinter as ctk
+
 from core.GestionProjet import GestionProjets
 from core.GestionAgents import GestionAgents
+from core.ToolsList import ToolsList
 
 from interface.MenuBar import MenuBar
+from interface.NoteBook import NoteBook
 from interface.ToplevelNewProject import TopLevelNewProject
 from interface.TopLevelLoadProject import TopLevelLoadProject
 from interface.TopLevelSaveAsProject import TopLevelSaveAsProject
@@ -16,6 +19,7 @@ class Root(ctk.CTk):
         self.title("Mes agents")
         self.geometry("1000x1000")
         self.popup = None
+        self.toolsList=ToolsList()
         self.config(menu=MenuBar(self,self.open_toplevel_new_projet,self.save_project,self.open_toplevel_save_as_projets,self.open_toplevel_project,self.toplevel_ai,self.change_theme))
 
         self.gestionProjets=GestionProjets(self)
@@ -27,6 +31,8 @@ class Root(ctk.CTk):
                 break
 
         self.gestion_agents = GestionAgents(self)
+        self.notebook=NoteBook(self,self.run_task)
+        self.notebook.pack(fill="both", expand=True, padx=10, pady=10)
 
     def open_toplevel_new_projet(self):
         self.popup = TopLevelNewProject(self, self.toplevel_new_project_create, self.toplevel_cancel)
@@ -58,7 +64,7 @@ class Root(ctk.CTk):
         self.popup.destroy()
 
     def toplevel_project_delete(self,index):
-       self.gestionProjets.delete_project(self.projects[index].nampe)
+       self.gestionProjets.delete_project(self.projects[index].name)
        self.projects = self.gestionProjets.read_saved_data()
        self.projectFocus = {}
        for project in self.projects:
@@ -67,12 +73,12 @@ class Root(ctk.CTk):
                self.title(self.projectFocus.name)
                break
 
-
     def toplevel_ai(self):
-        self.popup = TopLevelAi(self,self.toplevel_ai_save,self.toplevel_cancel,self.projectFocus.agents)
+        self.popup = TopLevelAi(self,self.toplevel_ai_save,self.toplevel_cancel,self.projectFocus.agents,self.toolsList.tools)
 
-    def toplevel_ai_save(self,data):
-        self.gestion_agents.dump_saved_data(data)
+    def toplevel_ai_save(self,agents):
+        self.projectFocus.agents=agents
+        self.gestionProjets.dump_saved_data(self.projectFocus)
         self.popup.destroy()
 
     def toplevel_cancel(self):
@@ -80,6 +86,9 @@ class Root(ctk.CTk):
 
     def change_theme(self,theme):
         ctk.CTk._set_appearance_mode(self,mode_string=theme)
+
+    def run_task(self):
+        print('run task')
 
 root=Root()
 root.mainloop()

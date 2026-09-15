@@ -5,3 +5,4 @@ class Project:
         self.focus=project["focus"]
         self.path=project["path"]
         self.agents=project["agents"]
+        self.tasks=project["tasks"]
