@@ -1,6 +1,5 @@
 {
-    "name": "projet2",
-    "focus": true,
+    "name": "project1",
     "path": "",
     "agents": [
         {
@@ -28,13 +27,30 @@
             "verbose": "True"
         },
         {
-            "role": "Reviewer senior2",
-            "goal": "Relire le code pour la qualit\u00e9, la s\u00e9curit\u00e9 et les bonnes pratiques\n",
-            "backstory": "Tu es exigeant sur la lisibilit\u00e9, la s\u00e9curit\u00e9 et la maintenabilit\u00e9.\n",
+            "role": "Reviewer senior",
+            "goal": "Relire le code pour la qualit\u00e9, la s\u00e9curit\u00e9 et les bonnes pratiques",
+            "backstory": "Tu es exigeant sur la lisibilit\u00e9, la s\u00e9curit\u00e9 et la maintenabilit\u00e9.",
             "model": "ollama/qwen2.5-coder:32b",
             "tools": [],
             "verbose": "True"
         }
     ],
-    "tasks": []
+    "tasks": [
+        {
+            "title": "D\u00e9coupe de besoins",
+            "order": 1,
+            "description": "D\u00e9coupe cette demande en t\u00e2ches de dev : {demande}",
+            "expected_output": "Une liste de t\u00e2ches num\u00e9rot\u00e9es avec crit\u00e8res d'acceptation",
+            "context": [],
+            "agent": "Chef de projet technique"
+        },
+        {
+            "title": "D\u00e9coupe de besoins",
+            "order": 1,
+            "description": "D\u00e9coupe cette demande en t\u00e2ches de dev : {demande}",
+            "expected_output": "Une liste de t\u00e2ches num\u00e9rot\u00e9es avec crit\u00e8res d'acceptation",
+            "context": [],
+            "agent": "Chef de projet technique"
+        }
+    ]
 }

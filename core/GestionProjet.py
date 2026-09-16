@@ -4,63 +4,56 @@ import json
 
 from core.Project import Project
 from core.Agent import Agent
-from core.Tasks import Tasks
+from core.Task import Task
+
 
 class GestionProjets:
-    def __init__(self,boss):
-        self.boss=boss
-        self.path= Path(__file__).parent.parent
+    def __init__(self, boss):
+        self.boss = boss
+        self.path = Path(__file__).parent.parent
 
-    def create_project(self,name,path):
-        self.change_focus_project()
-        name_project=name+".json"
-        f= open(self.path/"save/"/name_project,"x")
-        projet_json='{\n    "name":"'+name+'",\n    "focus":true,\n    "path": "'+path+'",\n    "agents":[],\n  "taches":[]}'
+    def create_project(self, project):
+        name_project = project['name'] + ".json"
+        f = open(self.path / "save/" / name_project, "x")
+        projet_json = '{\n    "name":"' + project['name'] + '",\n    "path": "' + project[
+            "path"] + '",\n    "agents":[],\n    "tasks":[]\n}'
         f.write(projet_json)
-        project=Project({"name": name, "focus": True, "path": path, "agents": [],"taches":[]})
-        return project
 
-    def read_saved_data(self):
-        files=os.listdir(str(self.path/"save"))
+    def get_all_project(self):
+        files = os.listdir(self.path / "save")
         projects=[]
         for file in files:
-            with open(self.path/"save/"/file,'r') as f:
-                data=json.load(f)
-                focus=data["focus"]
-                agents=[]
-                for agent in data["agents"]:
-                    agents.append(Agent(agent))
-                tasks=[]
-                for task in data["tasks"]:
-                    tasks.append(Tasks(task))
-                projects.append(Project({"name":data["name"],"focus":focus,"path":data['path'],"agents":agents,"tasks":tasks}))
+            projects.append(self.load_project(file[:-5]))
         return projects
 
-    def dump_saved_data(self,project):
-        name_project=project.name+".json"
-        agents=[]
+    def load_project(self, name):
+        name=name+".json"
+        with open(self.path / "save/" / name, 'r') as f:
+            data = json.load(f)
+            agents = []
+            for agent in data["agents"]:
+                agents.append(Agent(agent))
+            tasks = []
+            for task in data["tasks"]:
+                tasks.append(Task(task))
+            project = Project(
+                {"name": data["name"], "path": data['path'], "agents": agents, "tasks": tasks})
+        return project
+
+    def save_project(self, project):
+        name_project = project.name + ".json"
+        agents = []
         for agent in project.agents:
-            agents.append({"role":agent.role,"goal":agent.goal,"backstory":agent.backstory,"model":agent.model,"tools":agent.tools,"verbose":agent.verbose})
-        tasks=[]
+            agents.append({"role": agent.role, "goal": agent.goal, "backstory": agent.backstory, "model": agent.model,
+                           "tools": agent.tools, "verbose": agent.verbose})
+        tasks = []
         for task in project.tasks:
-            tasks.append({"description":task.description})
-        data={"name":project.name,"focus":project.focus,"path":project.path,"agents":agents,"tasks":tasks}
-        with open(self.path/"save"/name_project,'w') as f:
-            json.dump(data,f,indent=4)
+            tasks.append({"title": task.title, "order": task.order, "description": task.description,
+                          "expected_output": task.expected_output, "context": task.context, "agent": task.agent})
+        data = {"name": project.name, "path": project.path, "agents": agents, "tasks": tasks}
+        with open(self.path / "save" / name_project, 'w') as f:
+            json.dump(data, f, indent=4)
 
-    def delete_project(self,index):
-        index+=".json"
-        os.remove(self.path/"save/"/index)
-
-    def change_focus_project(self,name=""):
-        projects=self.read_saved_data()
-        for project in projects:
-            if project.name==name:
-                project.focus=True
-            else:
-                project.focus=False
-            self.dump_saved_data(project)
-
-
-
-
+    def delete_project(self, index):
+        index += ".json"
+        os.remove(self.path / "save/" / index)

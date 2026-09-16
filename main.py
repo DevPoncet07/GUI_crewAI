@@ -1,95 +1,87 @@
-import customtkinter as ctk
+import sys
 
-from core.GestionProjet import GestionProjets
-from core.GestionAgents import GestionAgents
-from core.ToolsList import ToolsList
+from PyQt6.QtWidgets import (
+    QApplication, QMainWindow, QTabWidget,QDialog,
+)
 
-from interface.MenuBar import MenuBar
-from interface.NoteBook import NoteBook
-from interface.ToplevelNewProject import TopLevelNewProject
-from interface.TopLevelLoadProject import TopLevelLoadProject
-from interface.TopLevelSaveAsProject import TopLevelSaveAsProject
-from interface.TopLevelAi import TopLevelAi
+from core.Core import Core
+from interface_pyqt.dialogues.DialogueLoadProject import DialogueLoadProject
+from interface_pyqt.dialogues.DialogueNewProject import DialogueNewProject
+from interface_pyqt.MenuBar import MenuBar
+
+from interface_pyqt.onglets.OngletExecution import OngletExecution
+from interface_pyqt.onglets.OngletTasks import OngletTasks
 
 
-
-class Root(ctk.CTk):
+class FenetrePrincipale(QMainWindow):
     def __init__(self):
-        ctk.CTk.__init__(self)
-        self.title("Mes agents")
-        self.geometry("1000x1000")
-        self.popup = None
-        self.toolsList=ToolsList()
-        self.config(menu=MenuBar(self,self.open_toplevel_new_projet,self.save_project,self.open_toplevel_save_as_projets,self.open_toplevel_project,self.toplevel_ai,self.change_theme))
+        super().__init__()
 
-        self.gestionProjets=GestionProjets(self)
-        self.projects=self.gestionProjets.read_saved_data()
-        for project in self.projects:
-            if project.focus:
-                self.projectFocus=project
-                self.title(self.projectFocus.name)
-                break
+        self.core=Core()
+        self.setWindowTitle("CrewIa - "+str(self.core.projectFocus.name))
 
-        self.gestion_agents = GestionAgents(self)
-        self.notebook=NoteBook(self,self.run_task)
-        self.notebook.pack(fill="both", expand=True, padx=10, pady=10)
 
-    def open_toplevel_new_projet(self):
-        self.popup = TopLevelNewProject(self, self.toplevel_new_project_create, self.toplevel_cancel)
+        self.menu = MenuBar(self)
+        self.setMenuBar(self.menu)
 
-    def toplevel_new_project_create(self,name,path):
-        self.projectFocus=self.gestionProjets.create_project(name,path)
-        self.projects = self.gestionProjets.read_saved_data()
-        self.title(self.projectFocus.name)
-        self.toplevel_cancel()
+
+        self.onglets = QTabWidget()
+
+        self.onglet_task = OngletTasks(self,self.core.projectFocus)
+        self.onglet_execution=OngletExecution()
+
+        self.onglets.addTab(self.onglet_task, "Tâches")
+        self.onglets.addTab(self.onglet_execution, "Execution")
+
+        self.setCentralWidget(self.onglets)
+
+    def create_new_project(self):
+        dialogue = DialogueNewProject(self)
+        result= dialogue.exec()
+        if result == QDialog.DialogCode.Accepted:
+            new_project= dialogue.donnees_project()
+            self.core.create_project(new_project)
+            self.setWindowTitle("CrewIa - " + str(self.core.projectFocus.name))
+
+    def load_project(self):
+        projects=self.core.get_all_projects()
+        dialogue = DialogueLoadProject(self,projects)
+        result = dialogue.exec()
+        if result == QDialog.DialogCode.Accepted:
+            project = dialogue.donnees_project()
+            self.core.load_project(project.name)
+            self.setWindowTitle("CrewIa - " + str(self.core.projectFocus.name))
+            self.onglet_task.display_all(self.core.projectFocus)
 
     def save_project(self):
-        self.gestionProjets.dump_saved_data(self.projectFocus)
+        self.core.save_project()
 
-    def open_toplevel_save_as_projets(self):
-        self.popup=TopLevelSaveAsProject(self,self.toplevel_save_as_project,self.toplevel_cancel)
+    def delete_children_layout(self,layout):
+        while layout.count():
+            item=layout.takeAt(0)
+            print(item)
+            widget=item.widget()
+            if widget is not None:
+                widget.deleteLater()
+            else:
+                sous_layout=item.layout()
+                if sous_layout is not None:
+                    self.delete_children_layout(sous_layout)
+if __name__ == "__main__":
 
-    def toplevel_save_as_project(self,name):
-        self.projectFocus.name=name
-        self.gestionProjets.dump_saved_data(self.projectFocus)
-        self.toplevel_cancel()
+    app = QApplication(sys.argv)
 
-    def open_toplevel_project(self):
-        self.popup = TopLevelLoadProject(self, self.projects, self.toplevel_projects_load, self.toplevel_cancel, self.toplevel_project_delete)
+    with open("interface_pyqt/style.qss", "r", encoding="utf-8") as f:
+        app.setStyleSheet(f.read())
 
-    def toplevel_projects_load(self,index):
-        self.projectFocus=self.projects[index]
-        self.title(self.projectFocus.name)
-        self.gestionProjets.change_focus_project(self.projectFocus.name)
-        self.popup.destroy()
+    window = FenetrePrincipale()
 
-    def toplevel_project_delete(self,index):
-       self.gestionProjets.delete_project(self.projects[index].name)
-       self.projects = self.gestionProjets.read_saved_data()
-       self.projectFocus = {}
-       for project in self.projects:
-           if project.focus:
-               self.projectFocus = project
-               self.title(self.projectFocus.name)
-               break
+    screen = app.screens()[0]
+    geometry_ecran = screen.availableGeometry()
+    x= geometry_ecran.x() + int((geometry_ecran.width() - window.width()) / 2)
+    y = geometry_ecran.y() + int((geometry_ecran.height() - window.height()) / 2)
 
-    def toplevel_ai(self):
-        self.popup = TopLevelAi(self,self.toplevel_ai_save,self.toplevel_cancel,self.projectFocus.agents,self.toolsList.tools)
-
-    def toplevel_ai_save(self,agents):
-        self.projectFocus.agents=agents
-        self.gestionProjets.dump_saved_data(self.projectFocus)
-        self.popup.destroy()
-
-    def toplevel_cancel(self):
-        self.popup.destroy()
-
-    def change_theme(self,theme):
-        ctk.CTk._set_appearance_mode(self,mode_string=theme)
-
-    def run_task(self):
-        print('run task')
-
-root=Root()
-root.mainloop()
-
+    # Move window to calculated coordinates
+    window.move(x, y)
+    window.show()
+    sys.exit(app.exec())
