@@ -2,9 +2,9 @@ import os
 from pathlib import Path
 import json
 
-from core.Project import Project
-from core.Agent import Agent
-from core.Task import Task
+from core.object.Project import Project
+from core.object.Agent import Agent
+from core.object.Task import Task
 
 
 class GestionProjets:
@@ -20,7 +20,7 @@ class GestionProjets:
         f.write(projet_json)
 
     def get_all_project(self):
-        files = os.listdir(self.path / "save")
+        files = os.listdir(self.path / "save/project")
         projects=[]
         for file in files:
             projects.append(self.load_project(file[:-5]))
@@ -28,7 +28,7 @@ class GestionProjets:
 
     def load_project(self, name):
         name=name+".json"
-        with open(self.path / "save/" / name, 'r') as f:
+        with open(self.path / "save/project" / name, 'r') as f:
             data = json.load(f)
             agents = []
             for agent in data["agents"]:
@@ -51,7 +51,7 @@ class GestionProjets:
             tasks.append({"title": task.title, "order": task.order, "description": task.description,
                           "expected_output": task.expected_output, "context": task.context, "agent": task.agent})
         data = {"name": project.name, "path": project.path, "agents": agents, "tasks": tasks}
-        with open(self.path / "save" / name_project, 'w') as f:
+        with open(self.path / "save/project" / name_project, 'w') as f:
             json.dump(data, f, indent=4)
 
     def delete_project(self, index):

@@ -10,3 +10,12 @@ class Agent:
 
     def __str__(self):
         return "name : "+self.role
+
+    def return_dict(self):
+        return {
+            "name":self.role,
+            "goal":self.goal,
+            "backstory":self.backstory,
+            "llm":self.model,
+            "verbose":self.verbose,
+        }

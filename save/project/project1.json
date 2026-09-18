@@ -38,19 +38,35 @@
     "tasks": [
         {
             "title": "D\u00e9coupe de besoins",
-            "order": 1,
+            "order":1,
             "description": "D\u00e9coupe cette demande en t\u00e2ches de dev : {demande}",
             "expected_output": "Une liste de t\u00e2ches num\u00e9rot\u00e9es avec crit\u00e8res d'acceptation",
             "context": [],
             "agent": "Chef de projet technique"
         },
         {
-            "title": "D\u00e9coupe de besoins",
-            "order": 1,
-            "description": "D\u00e9coupe cette demande en t\u00e2ches de dev : {demande}",
-            "expected_output": "Une liste de t\u00e2ches num\u00e9rot\u00e9es avec crit\u00e8res d'acceptation",
-            "context": [],
-            "agent": "Chef de projet technique"
+            "title": "Implémente les tâches définies",
+            "order": 2,
+            "description": "Implémente les tâches définies",
+            "expected_output": "Le code source complet des fichiers concernés",
+            "context": [1],
+            "agent": "Développeur"
+        },
+        {
+            "title": "Exécute les tests sur le code produit et rapporte les échecs",
+            "order": 3,
+            "description": "Exécute les tests sur le code produit et rapporte les échecs",
+            "expected_output": "Rapport de test : succès/échec avec détails",
+            "context": [2],
+            "agent": "Testeur QA"
+        },
+        {
+            "title": "Relis le code en tenant compte du rapport de test",
+            "order": 4,
+            "description": "Relis le code en tenant compte du rapport de test",
+            "expected_output": "Liste de remarques de review, ou validation finale",
+            "context": [1,2],
+            "agent": "Reviewer senior"
         }
     ]
 }

@@ -1,4 +1,4 @@
-from core.Task import Task
+from core.object.Task import Task
 
 class Project:
     def __init__(self,project):
@@ -14,7 +14,7 @@ class Project:
 
 
     def update_task(self,task):
-        print(task)
+        pass
 
 
 

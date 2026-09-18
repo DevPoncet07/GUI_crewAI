@@ -9,4 +9,4 @@ class Task:
         self.order=task["order"]
 
     def __str__(self):
-        return "title : "+self.title
+        return "Ordre : "+str(self.order)+"\n   title : "+self.title

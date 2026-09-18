@@ -1,20 +1,20 @@
-import os
+
 from pathlib import Path
 import json
 
+from core.CrewAi.GestionOutput import GestionOutput
 from core.GestionProjet import GestionProjets
+from core.CrewAi.Runner import Runner
 
 
 class Core:
-    def __init__(self):
+    def __init__(self,boss):
+        self.boss=boss
         self.localPath=Path(__file__).parent
         with open(self.localPath/"config.json", 'r') as f:
             self.config = json.load(f)
-
         self.gestionProjet=GestionProjets(self)
-
         self.projectFocus=self.gestionProjet.load_project(self.config["project_focus"])
-        print(self.projectFocus)
 
     def create_project(self,project):
         self.gestionProjet.create_project(project)
@@ -29,3 +29,39 @@ class Core:
 
     def save_project(self):
         self.gestionProjet.save_project(self.projectFocus)
+
+
+    def change_order_task(self,task,direction):
+        last_order=task.order
+        if direction=="up":
+            if last_order==1:
+                pass
+            else:
+                del self.projectFocus.tasks[last_order-1]
+                self.projectFocus.tasks.insert(last_order-2,task)
+
+        if direction=="down":
+            if last_order==len(self.projectFocus.tasks):
+                pass
+            else:
+                print("ok")
+                del self.projectFocus.tasks[last_order-1]
+                self.projectFocus.tasks.insert(last_order,task)
+        index = 1
+        for task in self.projectFocus.tasks:
+            task.order=index
+            index+=1
+        self.save_project()
+
+
+    def run_all(self):
+        self.gestion_output = GestionOutput(self.boss)
+        self.gestion_output.nouveau_texte.connect(self.boss.onglet_execution.ajouter_texte)
+        self.runner = Runner(self,self.projectFocus,self.boss.onglet_execution.ajouter_texte,self.gestion_output)
+        self.runner.start()
+
+    def stop_all(self):
+        print("stop all")
+        self.runner.terminate()
+
+
