@@ -1,13 +1,27 @@
-from PyQt6.QtWidgets import QWidget, QScrollArea, QHBoxLayout, QVBoxLayout, QLabel
+from PyQt6.QtWidgets import QWidget, QScrollArea, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QProgressBar
 from PyQt6.QtCore import Qt
 from interface_pyqt.onglets.tasks.WidgetOneTask import WidgetOneTask
 
 
 class WidgetTasks(QWidget):
-    def __init__(self):
+    def __init__(self,project):
         super().__init__()
+        self.project=project
         self.setFixedWidth(1000)
-        self.layout = QHBoxLayout()
+        self.layout = QVBoxLayout()
+
+        layout_top=QHBoxLayout()
+        button_add_task = QPushButton("Add Task")
+
+        button_up_task=QPushButton("Up")
+
+        button_down_task=QPushButton("Down")
+
+        layout_top.addWidget(button_add_task)
+        layout_top.addWidget(button_up_task)
+        layout_top.addWidget(button_down_task)
+        self.layout.addLayout(layout_top)
+
         self.scroll = QScrollArea()
         self.scroll.setWidgetResizable(True)
         self.scroll.setProperty('class', 'WidgetTasks--scroll')
@@ -48,6 +62,20 @@ class WidgetTasks(QWidget):
         container.setLayout(self.layout_tasks)
         self.scroll.setWidget(container)
         self.layout.addWidget(self.scroll)
+
+
+        layout_bottom=QHBoxLayout()
+        self.progress_bar=QProgressBar()
+        self.progress_bar.setMinimum(0)
+        self.progress_bar.setMaximum(len(self.project.tasks))
+        self.progress_bar.setValue(0)
+        self.progress_bar.setFormat("%v / %m tâches terminées")
+        layout_bottom.addWidget(self.progress_bar)
+
+        button_run=QPushButton("Run")
+        layout_bottom.addWidget(button_run)
+
+        self.layout.addLayout(layout_bottom)
         self.setLayout(self.layout)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -55,6 +83,7 @@ class WidgetTasks(QWidget):
         self.task_fous = None
 
     def display_all(self, project):
+        self.project=project
         for widget in self.widgets_tasks:
             self.layout_tasks.removeWidget(widget)
             widget.deleteLater()

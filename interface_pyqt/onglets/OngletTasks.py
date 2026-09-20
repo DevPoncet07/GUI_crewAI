@@ -7,14 +7,14 @@ from PyQt6.QtCore import Qt
 from interface_pyqt.onglets.tasks.WidgetTasks import WidgetTasks
 
 class OngletTasks(QWidget):
-    def __init__(self,boss,project_focus):
+    def __init__(self,boss,project):
         super().__init__()
         self.boss=boss
-        self.projectFocus=project_focus
+        self.projectFocus=project
         self.layout = QVBoxLayout()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.widget_tasks=WidgetTasks()
+        self.widget_tasks=WidgetTasks(project)
         self.layout.addWidget(self.widget_tasks)
 
         self.layout_tasks=QVBoxLayout()
