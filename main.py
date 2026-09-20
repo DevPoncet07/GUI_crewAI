@@ -55,17 +55,6 @@ class FenetrePrincipale(QMainWindow):
 
     def save_project(self):
         self.core.save_project()
-
-    def delete_children_layout(self,layout):
-        while layout.count():
-            item=layout.takeAt(0)
-            widget=item.widget()
-            if widget is not None:
-                widget.deleteLater()
-            else:
-                sous_layout=item.layout()
-                if sous_layout is not None:
-                    self.delete_children_layout(sous_layout)
 if __name__ == "__main__":
 
     app = QApplication(sys.argv)

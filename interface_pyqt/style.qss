@@ -2,3 +2,22 @@
 #DialogueNewProject--entry-name{
     width:500px
 }
+
+
+
+
+.OngletTasks--container_tasks{
+    border: 1px solid grey;
+    border-radius:10px;
+    padding:0px;
+}
+
+.OngletTasks--container_head_tasks{
+    padding:0px;
+    margin: 0px;
+    border-bottom: 1px solid grey;
+}
+.OngletTasks--label{
+    padding:0px;
+    margin: 0px;
+}
