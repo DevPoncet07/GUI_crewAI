@@ -57,8 +57,8 @@ class Core:
 
     def run_all(self):
         self.gestion_output = GestionOutput(self.boss)
-        self.gestion_output.nouveau_texte.connect(self.boss.onglet_execution.ajouter_texte)
-        self.runner = Runner(self,self.projectFocus,self.boss.onglet_execution.ajouter_texte,self.gestion_output)
+        self.gestion_output.nouveau_texte.connect(self.boss.onglet_execution.add_text)
+        self.runner = Runner(self,self.projectFocus,self.gestion_output)
         self.runner.start()
 
     def stop_all(self):

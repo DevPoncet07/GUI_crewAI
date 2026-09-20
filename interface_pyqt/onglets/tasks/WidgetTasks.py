@@ -4,18 +4,23 @@ from interface_pyqt.onglets.tasks.WidgetOneTask import WidgetOneTask
 
 
 class WidgetTasks(QWidget):
-    def __init__(self,project):
+    def __init__(self,boss,project):
         super().__init__()
+        self.boss=boss
         self.project=project
+        self.setFixedHeight(500)
         self.setFixedWidth(1000)
         self.layout = QVBoxLayout()
 
         layout_top=QHBoxLayout()
         button_add_task = QPushButton("Add Task")
+        button_add_task.clicked.connect(self.new_task)
 
         button_up_task=QPushButton("Up")
+        button_up_task.clicked.connect(self.up_task)
 
         button_down_task=QPushButton("Down")
+        button_down_task.clicked.connect(self.down_task)
 
         layout_top.addWidget(button_add_task)
         layout_top.addWidget(button_up_task)
@@ -28,6 +33,7 @@ class WidgetTasks(QWidget):
         self.scroll.viewport().setProperty( 'class', 'WidgetTasks--viewport')
         container = QWidget()
         container.setProperty('class', 'WidgetTasks--container_tasks')
+        container.setFixedHeight(800)
         self.layout_tasks = QVBoxLayout()
         self.layout_tasks.setAlignment(Qt.AlignmentFlag.AlignTop)
 
@@ -73,6 +79,7 @@ class WidgetTasks(QWidget):
         layout_bottom.addWidget(self.progress_bar)
 
         button_run=QPushButton("Run")
+        button_run.clicked.connect(self.run_task)
         layout_bottom.addWidget(button_run)
 
         self.layout.addLayout(layout_bottom)
@@ -84,6 +91,7 @@ class WidgetTasks(QWidget):
 
     def display_all(self, project):
         self.project=project
+        self.progress_bar.setMaximum(len(self.project.tasks))
         for widget in self.widgets_tasks:
             self.layout_tasks.removeWidget(widget)
             widget.deleteLater()
@@ -100,3 +108,15 @@ class WidgetTasks(QWidget):
                 widget.setProperty("class", "WidgetOneTasks--selected")
             widget.style().unpolish(widget)
             widget.style().polish(widget)
+
+    def new_task(self):
+        print('new_task')
+
+    def up_task(self):
+        print('up_task')
+
+    def down_task(self):
+        print('down_task')
+
+    def run_task(self):
+        self.boss.boss.run()

@@ -13,7 +13,7 @@ from interface_pyqt.onglets.OngletExecution import OngletExecution
 from interface_pyqt.onglets.OngletTasks import OngletTasks
 
 
-class FenetrePrincipale(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
@@ -51,10 +51,13 @@ class FenetrePrincipale(QMainWindow):
             project = dialogue.donnees_project()
             self.core.load_project(project.name)
             self.setWindowTitle("CrewIa - " + str(self.core.projectFocus.name))
-            self.onglet_task.display_all(self.core.projectFocus)
+            self.onglet_task.change_project_focus(self.core.projectFocus)
 
     def save_project(self):
         self.core.save_project()
+
+    def run(self):
+        self.core.run_all()
 if __name__ == "__main__":
 
     app = QApplication(sys.argv)
@@ -62,7 +65,7 @@ if __name__ == "__main__":
     with open("interface_pyqt/style.qss", "r", encoding="utf-8") as f:
         app.setStyleSheet(f.read())
 
-    window = FenetrePrincipale()
+    window = MainWindow()
 
     screen = app.screens()[0]
     geometry_ecran = screen.availableGeometry()

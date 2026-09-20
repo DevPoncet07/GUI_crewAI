@@ -6,10 +6,9 @@ from core.ToolsList import ToolsList
 
 
 class Runner(QThread):
-    def __init__(self,boss,project,output,gestion_output):
+    def __init__(self,boss,project,gestion_output):
         super().__init__()
         self.boss=boss
-        self.output=output
         self.gestion_output=gestion_output
         self.project=project
         self.tools=ToolsList(project.path)
