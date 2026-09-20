@@ -3,21 +3,29 @@
     width:500px
 }
 
-
-
-
-.OngletTasks--container_tasks{
-    border: 1px solid grey;
-    border-radius:10px;
-    padding:0px;
-}
-
-.OngletTasks--container_head_tasks{
-    padding:0px;
-    margin: 0px;
-    border-bottom: 1px solid grey;
-}
 .OngletTasks--label{
     padding:0px;
     margin: 0px;
 }
+
+.WidgetTasks--scroll{
+    border-radius: 10px;
+    background: #363636;
+    border: 1px solid grey;
+}
+
+.WidgetTasks--container_tasks{
+    border-radius:10px;
+    padding:0px;
+}
+
+.WidgetTasks--container_head_tasks{
+    padding:0px;
+    margin: 0px;
+    border-bottom: 1px solid grey;
+}
+
+.WidgetOneTasks--selected{
+    background: red
+}
+

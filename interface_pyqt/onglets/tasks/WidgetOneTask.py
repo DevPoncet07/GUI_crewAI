@@ -1,11 +1,15 @@
+from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QWidget
 
 
-class LayoutOneTask(QWidget):
-    def __init__(self,task):
+class WidgetOneTask(QWidget):
+    def __init__(self,task,boss):
         super().__init__()
-
+        self.boss=boss
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.layout=QHBoxLayout()
+        self.task=task
 
         label_order = QLabel(str(task.order))
         self.layout.addWidget(label_order)
@@ -28,3 +32,11 @@ class LayoutOneTask(QWidget):
         label_status.setFixedWidth(100)
 
         self.setLayout(self.layout)
+
+    def mousePressEvent(self, event):
+
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.boss.change_task_focus(self.task)
+
+    def mouseDoubleClickEvent(self, event):
+        print("ok")
