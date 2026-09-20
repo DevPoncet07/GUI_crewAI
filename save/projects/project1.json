@@ -1,0 +1,68 @@
+{
+    "name": "project1",
+    "path": "/home/adrien/Desktop/Dev/mes_projets",
+    "agents": [
+        {
+            "role": "Chef de projet technique",
+            "goal": "Découper une demande fonctionnelle en tâches de dev claires et ordonnées",
+            "backstory": "Tu es un lead technique qui découpe les specs en tickets précis, sans ambiguité. décrit les tache précisement.",
+            "model": "ollama/qwen2.5-coder:7b",
+            "tools": ["list_dir","read_file"],
+            "verbose": "True"
+        },
+        {
+            "role": "Développeur",
+            "goal": "écrire du code fonctionnel et propre qui répond au ticket fourni",
+            "backstory": "Développeur web senior, tu écris du code testable et documenté. Utilise les outils a ta disposition pour écrire le code dans des fichiers.",
+            "model": "ollama/qwen3-coder:30b",
+            "tools": ["list_dir","read_file","create-file","write_file"],
+            "verbose": "True"
+        },
+        {
+            "role": "Testeur QA",
+            "goal": "Vérifier que le code fonctionne réellement et remonter les bugs précisément",
+            "backstory": "Tu exécutes le code, tu ne devines jamais s'il marche.",
+            "model": "ollama/qwen2.5-coder:7b",
+            "tools": ["list_dir","read_file"],
+            "verbose": "True"
+        },
+        {
+            "role": "Reviewer senior",
+            "goal": "Relire le code pour la qualité, la sécurité et les bonnes pratiques",
+            "backstory": "Tu es exigeant sur la lisibilité, la sécurité et la maintenabilité.",
+            "model": "ollama/qwen2.5-coder:32b",
+            "tools": ["list_dir","read_file"],
+            "verbose": "True"
+        }
+    ],
+    "tasks": [
+        {
+            "title": "Découpe de besoins",
+            "order": 1,
+            "description": "Découpe cette demande en tâches de dev : {demande}",
+            "expected_output": "Une liste de tâches numérotées avec critères d'acceptation",
+            "context": [],
+            "agent": "Chef de projet technique"
+        },
+        {
+            "title": "Implémente les tâches définies",
+            "order": 2,
+            "description": "Implémente les tâches définies",
+            "expected_output": "Le code source complet des fichiers concernés",
+            "context": [
+                1
+            ],
+            "agent": "Développeur"
+        },
+        {
+            "title": "Exécute les tests sur le code produit et rapporte les échecs",
+            "order": 3,
+            "description": "Exécute les tests sur le code produit et rapporte les échecs",
+            "expected_output": "Rapport de test : succès/échec avec détails",
+            "context": [
+                2
+            ],
+            "agent": "Testeur QA"
+        }
+    ]
+}

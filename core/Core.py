@@ -18,7 +18,7 @@ class Core:
 
     def create_project(self,project):
         self.gestionProjet.create_project(project)
-        self.projectFocus=self.gestionProjet.load_project(project['name']+".json")
+        self.projectFocus=self.gestionProjet.load_project(project['name'])
 
     def load_project(self,name):
         self.projectFocus=self.gestionProjet.load_project(name)

@@ -14,13 +14,13 @@ class GestionProjets:
 
     def create_project(self, project):
         name_project = project['name'] + ".json"
-        f = open(self.path / "save/" / name_project, "x")
+        f = open(self.path / "save/projects" / name_project, "x")
         projet_json = '{\n    "name":"' + project['name'] + '",\n    "path": "' + project[
             "path"] + '",\n    "agents":[],\n    "tasks":[]\n}'
         f.write(projet_json)
 
     def get_all_project(self):
-        files = os.listdir(self.path / "save/project")
+        files = os.listdir(self.path / "save/projects")
         projects=[]
         for file in files:
             projects.append(self.load_project(file[:-5]))
@@ -28,7 +28,7 @@ class GestionProjets:
 
     def load_project(self, name):
         name=name+".json"
-        with open(self.path / "save/project" / name, 'r') as f:
+        with open(self.path / "save/projects" / name, 'r') as f:
             data = json.load(f)
             agents = []
             for agent in data["agents"]:
@@ -51,9 +51,9 @@ class GestionProjets:
             tasks.append({"title": task.title, "order": task.order, "description": task.description,
                           "expected_output": task.expected_output, "context": task.context, "agent": task.agent})
         data = {"name": project.name, "path": project.path, "agents": agents, "tasks": tasks}
-        with open(self.path / "save/project" / name_project, 'w') as f:
+        with open(self.path / "save/projects" / name_project, 'w') as f:
             json.dump(data, f, indent=4)
 
     def delete_project(self, index):
         index += ".json"
-        os.remove(self.path / "save/" / index)
+        os.remove(self.path / "save/projects" / index)

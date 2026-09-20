@@ -34,4 +34,4 @@ class Runner(QThread):
         with contextlib.redirect_stdout(self.gestion_output), contextlib.redirect_stderr(self.gestion_output):
             crew = Crew(agents=list_agent, tasks=tasks, process=Process.sequential, verbose=False)
             result = crew.kickoff(inputs={
-                "demande": "Créer petit script en javascript dans un fichier math.js a la racine du projet, ce script doit contenir plusieurs fonctione mathematique de base, exportable  "})
+                "demande": "Tu va améliorer un projet deja existant développer en python/PyQt6.Analyse les dossier python de ce projet. je veut que tu rajoute une fonctionalié. Au double click sur une tache un top level doit apparaitre et demander les inputs dont une tache a besoin"})
