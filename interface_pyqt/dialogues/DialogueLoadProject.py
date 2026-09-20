@@ -30,7 +30,6 @@ class DialogueLoadProject(QDialog):
 
     def output_listbox_project(self):
         self.project=self.projects[self.listbox_projects.currentRow()]
-        print(self.project)
 
 
     def donnees_project(self):

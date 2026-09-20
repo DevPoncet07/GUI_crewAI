@@ -17,7 +17,7 @@ class FenetrePrincipale(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.core=Core()
+        self.core=Core(self)
         self.setWindowTitle("CrewIa - "+str(self.core.projectFocus.name))
 
 
@@ -59,7 +59,6 @@ class FenetrePrincipale(QMainWindow):
     def delete_children_layout(self,layout):
         while layout.count():
             item=layout.takeAt(0)
-            print(item)
             widget=item.widget()
             if widget is not None:
                 widget.deleteLater()

@@ -22,7 +22,9 @@ class Core:
 
     def load_project(self,name):
         self.projectFocus=self.gestionProjet.load_project(name)
-
+        self.config["project_focus"]=name
+        with open(self.localPath/"config.json", 'w') as f:
+            json.dump(self.config,f,indent=4)
     def get_all_projects(self):
         projects=self.gestionProjet.get_all_project()
         return projects
@@ -44,7 +46,6 @@ class Core:
             if last_order==len(self.projectFocus.tasks):
                 pass
             else:
-                print("ok")
                 del self.projectFocus.tasks[last_order-1]
                 self.projectFocus.tasks.insert(last_order,task)
         index = 1
@@ -61,7 +62,6 @@ class Core:
         self.runner.start()
 
     def stop_all(self):
-        print("stop all")
         self.runner.terminate()
 
 
