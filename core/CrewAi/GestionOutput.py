@@ -4,7 +4,8 @@ from datetime import datetime
 import os
 
 class GestionOutput(QObject):
-    nouveau_texte = pyqtSignal(str)
+    text_log = pyqtSignal(str)
+    status_agent=pyqtSignal(str,str)
     def __init__(self,boss):
         super().__init__()
         self.localPath = Path(__file__).parent.parent.parent
@@ -21,11 +22,10 @@ class GestionOutput(QObject):
             file_id=str("0"*(3-len(str(file_id)))+str(file_id))
             self.today+="_"+str(file_id)+".txt"
         self.file_name=self.localPath/"save/logs"/self.today
-        file =open(self.file_name,"w")
-        file.close()
+        file =open(self.file_name,"w").close()
 
     def write(self,text):
-        self.nouveau_texte.emit(text)
+        self.text_log.emit(text)
         file =open(self.file_name,"a")
         file.write(text)
         file.close()

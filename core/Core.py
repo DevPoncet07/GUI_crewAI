@@ -57,7 +57,8 @@ class Core:
 
     def run_all(self):
         self.gestion_output = GestionOutput(self.boss)
-        self.gestion_output.nouveau_texte.connect(self.boss.onglet_execution.add_text)
+        self.gestion_output.text_log.connect(self.boss.onglet_execution.add_text)
+        self.gestion_output.status_agent.connect(self.boss.onglet_task.maj_status)
         self.runner = Runner(self,self.projectFocus,self.gestion_output)
         self.runner.start()
 
