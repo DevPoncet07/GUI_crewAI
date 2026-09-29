@@ -1,10 +1,16 @@
 
 from pathlib import Path
 import json
+import os
+os.environ["CREWAI_TELEMETRY_OPT_OUT"] = "false"
+os.environ["OTEL_TRACES_EXPORTER"] = "none"
+os.environ["OTEL_METRICS_EXPORTER"] = "none"
+
 
 from core.CrewAi.GestionOutput import GestionOutput
 from core.GestionProjet import GestionProjets
 from core.CrewAi.Runner import Runner
+
 
 
 class Core:

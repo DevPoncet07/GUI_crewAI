@@ -33,5 +33,7 @@ class OngletTasks(QWidget):
         self.projectFocus=project
         self.widget_tasks.display_all(project)
 
+    def maj_status(self,status):
+        print("Status :"+status)
 
 

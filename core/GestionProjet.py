@@ -57,3 +57,22 @@ class GestionProjets:
     def delete_project(self, index):
         index += ".json"
         os.remove(self.path / "save/projects" / index)
+
+    def update_task_parameters(self, project_name, task_index, task_data):
+        """
+        Update the parameters of a specific task in the project.
+        :param project_name: Name of the project.
+        :param task_index: Index of the task in the project's tasks list.
+        :param task_data: Dictionary containing the updated task parameters.
+        """
+        project = self.load_project(project_name)
+        if 0 <= task_index < len(project.tasks):
+            # Update the task with new parameters
+            updated_task = project.tasks[task_index]
+            updated_task.description = task_data.get("description", updated_task.description)
+            updated_task.agent = task_data.get("agent", updated_task.agent)
+            updated_task.order = task_data.get("order", updated_task.order)
+            # Save the updated project
+            self.save_project(project)
+        else:
+            raise IndexError("Task index out of bounds")

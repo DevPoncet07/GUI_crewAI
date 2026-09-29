@@ -1,4 +1,8 @@
 import sys
+import os
+
+os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
+os.environ["OTEL_SDK_DISABLED"] = "true"
 
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QTabWidget,QDialog,
